@@ -1,57 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import AsyncSelect from 'react-select/async';
+import { geoApiOptions, GEO_API_URL } from '../../api';
 
 const Search = () => {
+  const [search, setSearch] = useState({
+    lat: '',
+    lon: '',
+  });
   const [input, setInput] = useState('');
-  const [error, setError] = useState(null);
   const [weather, setWeather] = useState({});
 
-  const fetchGeocoding = async () => {
-    const response = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${input}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb`,
-    );
-    const json = await response.json();
-    return { lat: json[0].lat, lon: json[0].lon };
-  };
+  useEffect(() => {
+    const fetchWeather = async () => {
+      console.log('Latitude: ' + search.lat);
+      console.log('Longitude: ' + search.lon);
 
-  const fetchWeather = async () => {
-    const { lat, lon } = await fetchGeocoding();
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br`,
-    );
-    const json = await response.json();
-    setWeather(json);
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${search.lat}&lon=${search.lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br`,
+      );
+      const json = await response.json();
+      setWeather(json);
+    };
+    fetchWeather();
+  }, [search]);
+
+  const loadOptions = (inputValue) => {
+    return fetch(
+      `${GEO_API_URL}/cities?minPopulation=100000&namePrefix=${inputValue}`,
+      geoApiOptions,
+    )
+      .then((response) => response.json())
+      .then((response) =>
+        response.data.map((data) => {
+          return {
+            value: `${data.latitude} ${data.longitude}`,
+            label: `${data.name}, ${data.countryCode}`,
+          };
+        }),
+      )
+      .catch((err) => console.log(err));
   };
 
   const handleChange = (e) => {
-    setInput(e.target.value);
-  };
-
-  const handleClick = () => {
-    if (input === '') {
-      setError('Preencha o campo');
-    } else {
-      fetchGeocoding();
-      fetchWeather();
-    }
+    setSearch({
+      lat: e.value.split(' ')[0],
+      lon: e.value.split(' ')[1],
+    });
   };
 
   return (
     <div className="relative w-5/12">
       {weather && weather.coord && weather.weather[0].description}
+      {weather && weather.name}
 
-      <input
-        className="h-12 w-full p-4 rounded-full"
-        type="text"
-        placeholder="Digite aqui..."
+      <AsyncSelect
+        placeholder="Pesquisa por uma cidade"
         onChange={handleChange}
+        loadOptions={loadOptions}
       />
-      {error && <span>{error}</span>}
-      <button
-        className="flex justify-center items-center absolute right-1 top-0 bottom-0 rounded-full bg-transparent hover:bg-gray-800 border-none focus:outline-none transition-all w-10 h-10 m-auto"
-        onClick={handleClick}
-      >
-        <i className="fa-solid fa-magnifying-glass"></i>
-      </button>
     </div>
   );
 };
