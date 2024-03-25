@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import { geoApiOptions, GEO_API_URL } from '../../api';
+import { WeatherContext } from '../../WeatherContext';
 
 const Search = () => {
   const [search, setSearch] = useState({
@@ -9,17 +10,41 @@ const Search = () => {
   });
   const [input, setInput] = useState('');
   const [weather, setWeather] = useState({});
+  const { data, setData } = useContext(WeatherContext);
+
+  useEffect(() => {
+    function showPosition(position) {
+      setSearch({
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+
+      const fetchWeather = async () => {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${search.lat}&lon=${search.lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
+        );
+        const json = await response.json();
+        setWeather(json);
+        setData(json);
+      };
+      fetchWeather();
+    } else {
+      x.innerHTML = 'Geolocation is not supported by this browser.';
+    }
+  }, []);
 
   useEffect(() => {
     const fetchWeather = async () => {
-      console.log('Latitude: ' + search.lat);
-      console.log('Longitude: ' + search.lon);
-
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${search.lat}&lon=${search.lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br`,
+        `https://api.openweathermap.org/data/2.5/weather?lat=${search.lat}&lon=${search.lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
       );
       const json = await response.json();
       setWeather(json);
+      setData(json);
     };
     fetchWeather();
   }, [search]);
@@ -50,9 +75,6 @@ const Search = () => {
 
   return (
     <div className="relative w-5/12">
-      {weather && weather.coord && weather.weather[0].description}
-      {weather && weather.name}
-
       <AsyncSelect
         placeholder="Pesquisa por uma cidade"
         onChange={handleChange}
