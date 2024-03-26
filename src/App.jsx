@@ -2,23 +2,38 @@ import { useState } from 'react';
 import Header from './components/Header/Header';
 import { WeatherContext } from './WeatherContext';
 import CurrentDay from './components/CurrentDay/CurrentDay';
+import Forecast5Days from './components/Forecast5Days/Forecast5Days';
 
 function App() {
-  const [data, setData] = useState();
+  const [currentWeather, setCurrentWeather] = useState();
+  const [forecast5Days, setForecast5Days] = useState();
 
-  console.log(data);
+  if (currentWeather && forecast5Days) {
+    console.log('Atual' + currentWeather.cod);
+    console.log('Futuro' + forecast5Days.cod);
+  }
 
   function getComponents() {
-    if (data && data.cod === 200) {
+    if (currentWeather && currentWeather.cod === 200) {
       return (
-        <CurrentDay />
-      )
+        <div className="">
+          <CurrentDay />
+          <Forecast5Days />
+        </div>
+      );
     }
   }
 
   return (
     <>
-      <WeatherContext.Provider value={{ data, setData }}>
+      <WeatherContext.Provider
+        value={{
+          currentWeather,
+          setCurrentWeather,
+          forecast5Days,
+          setForecast5Days,
+        }}
+      >
         <Header />
         {getComponents()}
       </WeatherContext.Provider>
