@@ -4,13 +4,13 @@ import Search from '../Search/Search.jsx';
 import { WeatherContext } from '../../WeatherContext.jsx';
 
 const Header = () => {
-  const { data, setData } = useContext(WeatherContext);
+  const { currentWeather, setCurrentWeather } = useContext(WeatherContext);
 
   return (
     <header className="flex justify-between items-center h-16">
       <h1 className="text-2xl">
         <i className="fa-solid fa-location-dot mr-4"></i>
-        {data && data.name}
+        {currentWeather && currentWeather.name}
       </h1>
       <Search />
       <Mode />
