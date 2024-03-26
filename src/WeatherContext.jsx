@@ -1,6 +1,8 @@
 import { createContext } from 'react';
 
 export const WeatherContext = createContext({
-  data: {},
-  setData: () => {},
+  currentWeather: {},
+  forecast5Days: {},
+  setCurrentWeather: () => {},
+  setForecast5Days: () => {},
 });
