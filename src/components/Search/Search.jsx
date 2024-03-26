@@ -10,8 +10,10 @@ const Search = () => {
   });
   const [input, setInput] = useState('');
   const [weather, setWeather] = useState({});
-  const { data, setData } = useContext(WeatherContext);
+  const { currentWeather, setCurrentWeather, forecast5Days, setForecast5Days } =
+    useContext(WeatherContext);
 
+  // Start da sincronização na primeira renderização consultando a localização atual
   useEffect(() => {
     function showPosition(position) {
       setSearch({
@@ -29,14 +31,25 @@ const Search = () => {
         );
         const json = await response.json();
         setWeather(json);
-        setData(json);
+        setCurrentWeather(json);
       };
+
+      const fetchForecast5Days = async () => {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${search.lat}&lon=${search.lon}&cnt=6&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
+        );
+        const json = await response.json();
+        setForecast5Days(json);
+      };
+
       fetchWeather();
+      fetchForecast5Days();
     } else {
       x.innerHTML = 'Geolocation is not supported by this browser.';
     }
   }, []);
 
+  // Start da sincronização quando houver uma pesquisa
   useEffect(() => {
     const fetchWeather = async () => {
       const response = await fetch(
@@ -44,9 +57,19 @@ const Search = () => {
       );
       const json = await response.json();
       setWeather(json);
-      setData(json);
+      setCurrentWeather(json);
     };
+
+    const fetchForecast5Days = async () => {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${search.lat}&lon=${search.lon}&cnt=6&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
+      );
+      const json = await response.json();
+      setForecast5Days(json);
+    };
+
     fetchWeather();
+    fetchForecast5Days();
   }, [search]);
 
   const loadOptions = (inputValue) => {
