@@ -62,7 +62,7 @@ const Search = () => {
 
     const fetchForecast5Days = async () => {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${search.lat}&lon=${search.lon}&cnt=6&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${search.lat}&lon=${search.lon}&appid=2485fa7ddb71d3d0fe506f3dc5d8d4eb&lang=pt_br&units=metric`,
       );
       const json = await response.json();
       setForecast5Days(json);
