@@ -4,6 +4,15 @@ import { WeatherContext } from '../../WeatherContext';
 const Forecast5Days = () => {
   const { forecast5Days, setForecast5Days } = useContext(WeatherContext);
 
+  function formatDate(element) {
+    const date = element.split(' ')[0];
+    const day = date.split('-')[2];
+    const month = date.split('-')[1];
+    const year = date.split('-')[0];
+
+    return `${day}/${month}/${year}`;
+  }
+
   function ignoreSameDay(element, index, array) {
     if (index === 0) {
       return true
@@ -17,18 +26,22 @@ const Forecast5Days = () => {
     }
   }
 
+  function listDays(element, index) {
+    return (
+      <div key={index} className="w-1/5 h bg-cyan-950 rounded-xl p-5 mt-4">
+        <img src={`https://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`} alt="Clima" />
+        <p>{element.main.temp} ºC</p>
+        <p>{element.weather[0].description}</p>
+        <p>{formatDate(element.dt_txt)}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex gap-2">
       {forecast5Days &&
         forecast5Days.list &&
-        forecast5Days.list.filter((element, index, array) => ignoreSameDay(element, index, array)).map((element, index) => (
-          <div key={index} className="w-1/5 h bg-cyan-950 rounded-xl p-5 mt-4">
-            <img src={`https://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`} alt="Clima" />
-            <p>{element.main.temp} ºC</p>
-            {element.weather[0].description}
-            {element.dt_txt}
-          </div>
-        ))}
+        forecast5Days.list.filter((element, index, array) => ignoreSameDay(element, index, array)).map((element, index) => listDays(element, index))}
     </div>
   );
 };
