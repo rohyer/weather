@@ -16,10 +16,10 @@ function App() {
   function getComponents() {
     if (currentWeather && currentWeather.cod === 200) {
       return (
-        <div className="">
+        <>
           <CurrentDay />
           <Forecast5Days />
-        </div>
+        </>
       );
     }
   }
