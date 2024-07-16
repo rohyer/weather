@@ -28,7 +28,7 @@ const Forecast5Days = () => {
 
   function listDays(element, index) {
     return (
-      <div key={index} className="w-1/5 bg-cyan-950 rounded-xl p-5 mt-4">
+      <div key={index} className="w-1/6 bg-cyan-950 rounded-xl p-5 mt-4">
         <img src={`https://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`} alt="Clima" />
         <p>{element.main.temp} ºC</p>
         <p>{element.weather[0].description}</p>
