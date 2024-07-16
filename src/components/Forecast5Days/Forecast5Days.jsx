@@ -28,7 +28,7 @@ const Forecast5Days = () => {
 
   function listDays(element, index) {
     return (
-      <div key={index} className="w-1/5 h bg-cyan-950 rounded-xl p-5 mt-4">
+      <div key={index} className="w-1/5 bg-cyan-950 rounded-xl p-5 mt-4">
         <img src={`https://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`} alt="Clima" />
         <p>{element.main.temp} ºC</p>
         <p>{element.weather[0].description}</p>
@@ -38,7 +38,7 @@ const Forecast5Days = () => {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 h-full">
       {forecast5Days &&
         forecast5Days.list &&
         forecast5Days.list.filter((element, index, array) => ignoreSameDay(element, index, array)).map((element, index) => listDays(element, index))}
