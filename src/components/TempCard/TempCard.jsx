@@ -18,7 +18,7 @@ const TempCard = () => {
   }
 
   return (
-    <div className="w-1/5 h bg-cyan-950 rounded-xl p-5 mt-4">
+    <div className="w-2/6 h bg-cyan-950 rounded-xl p-5 mt-4">
       {currentWeather && currentWeather.weather && (
         <>
           <img
