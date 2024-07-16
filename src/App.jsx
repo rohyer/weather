@@ -17,8 +17,8 @@ function App() {
   function getComponents() {
     if (currentWeather && currentWeather.cod === 200) {
       return (
-        <div className='flex flex-wrap gap-2'>
-          <div className='w-full lg:w-4/6'>
+        <div className='flex justify-between gap-2'>
+          <div className='flex flex-col w-full lg:w-4/5'>
             <CurrentDay />
             <Forecast5Days />
           </div>
