@@ -13,7 +13,7 @@ const SunCard = () => {
   }
 
   return (
-    <div className="flex flex-col justify-end w-1/5 h bg-cyan-950 rounded-xl p-5 mt-4">
+    <div className="flex flex-col justify-end w-2/6 h bg-cyan-950 rounded-xl p-5 mt-4">
       { currentWeather && (
         <>
           <h4>Nascer:</h4>
