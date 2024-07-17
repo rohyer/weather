@@ -23,9 +23,9 @@ const Cities = () => {
   console.log(cities);
 
   return (
-    <div className="flex flex-col justify-start w-1/5 h">
+    <div className="flex flex-col justify-start w-1/5 h gap-2 mt-4">
       {cities.map((city) => (
-        <div className="flex flex-row justify-between items-center w-full h bg-cyan-950 rounded-xl p-5 mt-4">
+        <div className="flex flex-row justify-between items-center w-full h bg-cyan-950 rounded-xl p-5">
           <div>
             <h3>{city.name}</h3>
             <p>{city.weather[0].description}</p>
