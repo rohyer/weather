@@ -18,7 +18,7 @@ function App() {
     if (currentWeather && currentWeather.cod === 200) {
       return (
         <div className='flex justify-between gap-2'>
-          <div className='flex flex-col w-full lg:w-4/5'>
+          <div className='flex flex-col w-full lg:w-4/5 gap-2'>
             <CurrentDay />
             <Forecast5Days />
           </div>
